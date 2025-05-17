@@ -2,98 +2,103 @@ extends ../layouts/default.pug
 
 block main
   h1.box-title Tài khoản quản trị
-
-  //- Section 4
-  .section-4
-    .inner-wrap
-      .inner-item.inner-label
-        <i class="fa-solid fa-filter"></i> Bộ lọc
-      .inner-item
-        select(filter-account-status)
-          option(value="") Trạng thái
-          option(value="initial") Khởi tạo
-          option(value="active") Hoạt động
-      .inner-item.inner-date
-        input(type="date" filter-account-startDate)
-        span -
-        input(type="date" filter-account-EndDate)
-      .inner-item
-        select(filter-account-role)
-          option(value="") Nhóm quyền
-          each item in roleList
-            option(value=item.id) #{item.name}
-      .inner-item.inner-reset(filter-account-delete)
-        <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
-  //- End Section 4
-
-  //- Section 5
-  .section-5
-    .inner-wrap
-      .inner-change-status(change-status-account)
+  - if (permissions.includes("account-view"))
+    //- Section 4
+    .section-4
+      .inner-wrap
+        .inner-item.inner-label
+          <i class="fa-solid fa-filter"></i> Bộ lọc
         .inner-item
-          select
-            option(value="") -- Hành động --
+          select(filter-account-status)
+            option(value="") Trạng thái
             option(value="initial") Khởi tạo
             option(value="active") Hoạt động
-            option(value="delete") Xóa
+        .inner-item.inner-date
+          input(type="date" filter-account-startDate)
+          span -
+          input(type="date" filter-account-EndDate)
         .inner-item
-          button Áp dụng
-      .inner-search
-        <i class="fa-solid fa-magnifying-glass"></i>
-        input(type="text" placeholder="Tìm kiếm" searchAccount)
-      .inner-button-create
-        a(href=`/${pathAdmin}/setting/account-admin/create`) + Tạo mới
-  //- End Section 5
+          select(filter-account-role)
+            option(value="") Nhóm quyền
+            each item in roleList
+              option(value=item.id) #{item.name}
+        .inner-item.inner-reset(filter-account-delete)
+          <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
+    //- End Section 4
 
-  //- Section 6
-  .section-6
-    .table-2
-      table
-        thead
-          tr
-            th(class="inner-center")
-              input(type="checkbox" class="inner-check" checkALlAccount)
-            th Họ tên
-            th(class="inner-center") Ảnh đại diện
-            th Email
-            th Số điện thoại
-            th Nhóm quyền
-            th Chức vụ
-            th Trạng thái
-            th Hành động
-        tbody
-          each item in accountList
+    //- Section 5
+    .section-5
+      .inner-wrap
+        .inner-change-status(change-status-account)
+          .inner-item
+            select
+              option(value="") -- Hành động --
+              - if (permissions.includes("account-edit"))
+                option(value="initial") Khởi tạo
+                option(value="active") Hoạt động
+              - if (permissions.includes("account-delete"))
+                option(value="delete") Xóa
+          .inner-item
+            button Áp dụng
+        .inner-search
+          <i class="fa-solid fa-magnifying-glass"></i>
+          input(type="text" placeholder="Tìm kiếm" searchAccount)
+        - if (permissions.includes("account-create"))
+          .inner-button-create
+            a(href=`/${pathAdmin}/setting/account-admin/create`) + Tạo mới
+    //- End Section 5
+
+    //- Section 6
+    .section-6
+      .table-2
+        table
+          thead
             tr
-              td(class="inner-center")
-                input(type="checkbox" class="inner-check" checkItem=item.id)
-              td #{item.fullName}
-              td(class="inner-center")
-                img(src=item.avatar class="inner-avatar")
-              td #{item.email}
-              td #{item.phone}
-              td #{item.roleName}
-              td #{item.positionCompany}
-              td
-                - if(item.status=="active")
-                  .badge.badge-green Hoạt động
-                - else if(item.status == "initial")
-                  .badge.badge-red Khởi tạo
-                - else if(item.status == "inactive")
-                  .badge.badge-red Tạm dừng
-              td
-                .inner-buttons
-                  a(
-                    href = `/${pathAdmin}/setting/account-admin/edit/${item.id}`
-                    class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
-                  button(class="inner-delete" button-delete-account
-                    api-delete-account = `/${pathAdmin}/setting/account-admin/delete/${item.id}`
-                  ) <i class="fa-regular fa-trash-can"></i>
-  //- End Section 6
+              th(class="inner-center")
+                input(type="checkbox" class="inner-check" checkALlAccount)
+              th Họ tên
+              th(class="inner-center") Ảnh đại diện
+              th Email
+              th Số điện thoại
+              th Nhóm quyền
+              th Chức vụ
+              th Trạng thái
+              th Hành động
+          tbody
+            each item in accountList
+              tr
+                td(class="inner-center")
+                  input(type="checkbox" class="inner-check" checkItem=item.id)
+                td #{item.fullName}
+                td(class="inner-center")
+                  img(src=item.avatar class="inner-avatar")
+                td #{item.email}
+                td #{item.phone}
+                td #{item.roleName}
+                td #{item.positionCompany}
+                td
+                  - if(item.status=="active")
+                    .badge.badge-green Hoạt động
+                  - else if(item.status == "initial")
+                    .badge.badge-red Khởi tạo
+                  - else if(item.status == "inactive")
+                    .badge.badge-red Tạm dừng
+                td
+                  .inner-buttons
+                    - if (permissions.includes("account-edit"))
+                      a(
+                        href = `/${pathAdmin}/setting/account-admin/edit/${item.id}`
+                        class="inner-edit") <i class="fa-regular fa-pen-to-square"></i>
+                    - if (permissions.includes("account-delete"))
+                      button(class="inner-delete" button-delete-account
+                        api-delete-account = `/${pathAdmin}/setting/account-admin/delete/${item.id}`
+                      ) <i class="fa-regular fa-trash-can"></i>
+    //- End Section 6
 
-  //- Section 7
-  .section-7
-    span(class="inner-label") Hiển thị #{skip+1} - #{skip+accountList.length}  của #{totalAccount}
-    select(class="inner-pagination" account-page)
-      - for(let i=1;i<=totalPage;i++)
-        option(value=i) Trang #{i}
-  //- End Section 7
+    //- Section 7
+    .section-7
+      span(class="inner-label") Hiển thị #{skip+1} - #{skip+accountList.length}  của #{totalAccount}
+      select(class="inner-pagination" account-page)
+        - for(let i=1;i<=totalPage;i++)
+          option(value=i) Trang #{i}
+    //- End Section 7

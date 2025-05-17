@@ -146,7 +146,19 @@ module.exports.accountAdminList = async (req,res) =>{
         const regex = new RegExp(slug,"i")
         find.slug = regex
     }
-    const accountList = await AccoutnAdmin.find(find)
+    const totalAccount = await AccoutnAdmin.countDocuments({})
+    const limit =3
+    let page =1
+    if(req.query.page>0){
+        page = req.query.page
+    }
+    const skip = (page-1)*limit
+    const totalPage = Math.ceil(totalAccount/limit)
+
+    const accountList = await AccoutnAdmin
+    .find(find)
+    .limit(limit)
+    .skip(skip)
     const roleList = await Role.find({
         deleted:false
     })
@@ -159,7 +171,10 @@ module.exports.accountAdminList = async (req,res) =>{
     res.render("admin/pages/setting-account-admin-list",{
         pageTitle:"Tài khoản quản trị",
         accountList:accountList,
-        roleList:roleList
+        roleList:roleList,
+        totalPage:totalPage,
+        skip:skip,
+        totalAccount:totalAccount
     })
 }
 

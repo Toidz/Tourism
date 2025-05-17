@@ -1232,6 +1232,7 @@ if(profileEditForm) {
       },
     ])
     .onSuccess((event) => {
+      const id = event.target.id.value
       const fullName = event.target.fullName.value;
       const email = event.target.email.value;
       const phone = event.target.phone.value;
@@ -1239,12 +1240,33 @@ if(profileEditForm) {
       let avatar = null;
       if(avatars.length > 0) {
         avatar = avatars[0].file;
+        const elementImageDefault = event.target.avatar.closest("[image-default]");
+        if(elementImageDefault){
+          const imageDefault = elementImageDefault.getAttribute("image-default");
+          if(imageDefault.includes(avatar.name)) {
+            avatar=null
+          }
+        }
       }
+      const formData = new FormData()
+      formData.append("fullName",fullName)
+      formData.append("email",email)
+      formData.append("phone",phone)
+      formData.append("avatar",avatar)
 
-      console.log(fullName);
-      console.log(email);
-      console.log(phone);
-      console.log(avatar);
+      fetch(`/${pathAdmin}/profile/edit/${id}`,{
+        method:"PATCH",
+        body:formData
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
     })
   ;
 }
@@ -1297,7 +1319,25 @@ if(profileChangePasswordForm) {
     ])
     .onSuccess((event) => {
       const password = event.target.password.value;
-      console.log(password);
+      const dataFinal = {
+        password:password
+      }
+      fetch(`/${pathAdmin}/profile/change-password`,{
+        method:"PATCH",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body: JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
     })
   ;
 }
