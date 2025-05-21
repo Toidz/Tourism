@@ -4,10 +4,16 @@ html
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title #{pageTitle}
+
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css")
     link(rel="stylesheet", href="https://unpkg.com/filepond@^4/dist/filepond.css")
     link(rel="stylesheet", href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css")
     link(rel="stylesheet", href="/admin/assets/css/style.css")
+    link(
+    rel="icon"
+    href=info.favicon
+    type="image/png"
+    )
     script.
       const pathAdmin = "#{pathAdmin}";
     script(src="https://cdn.tiny.cloud/1/48o2c1fab4ob6zz2k9yvznjd70eyxfco2ehwdnb8i0y987g6/tinymce/7/tinymce.min.js" referrerpolicy="origin")

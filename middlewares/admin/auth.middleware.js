@@ -29,6 +29,7 @@ module.exports.verifyToken = async (req,res,next)=>{
 
         res.locals.role = role
         res.locals.permissions = role.permissions
+
         const websiteInfo = await SettingWebsiteInfo.findOne({})
         res.locals.websiteInfo = websiteInfo;
         
