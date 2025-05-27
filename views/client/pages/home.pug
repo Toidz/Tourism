@@ -17,11 +17,12 @@ block main
           data-aos="fade-up"
           )
           | Trải nghiệm, đi đến mọi nơi cùng TRAVELTOGETHER
-        form.inner-form(
+        .inner-form(
           data-aos-delay="300" 
           data-aos-duration="800" 
           data-aos="fade-up" 
           action="#"
+          search
           )
           .inner-box.inner-address
             .inner-input-group
@@ -29,40 +30,8 @@ block main
               input.inner-input(
                 placeholder="Bạn muốn đi đâu?" 
                 type="text"
+                locationEnd
                 )
-              i.fa-solid.fa-angle-down.inner-down
-            .inner-suggest
-              .inner-suggest-title
-                i.fa-solid.fa-location-dot
-                | Địa Điểm Hot
-              .inner-suggest-list
-                .inner-item
-                  .inner-item-image
-                    img(
-                      alt="" 
-                      src="/assets/images/product-1.jpg"
-                      )
-                  .inner-item-content
-                    .inner-item-title Nhật Bản
-                    .inner-item-desc 50 tours
-                .inner-item
-                  .inner-item-image
-                    img(
-                      alt="" 
-                      src="/assets/images/product-2.jpg"
-                      )
-                  .inner-item-content
-                    .inner-item-title Phú Quốc
-                    .inner-item-desc 50 tours
-                .inner-item
-                  .inner-item-image
-                    img(
-                      alt="" 
-                      src="/assets/images/product-3.jpg"
-                      )
-                  .inner-item-content
-                    .inner-item-title Singapore
-                    .inner-item-desc 50 tours
           .inner-box.inner-user
             .inner-input-group
               img.inner-icon(src="/assets/images/icon-user.svg")
@@ -76,25 +45,25 @@ block main
                 .inner-label Người lớn
                 .inner-count
                   span.inner-down -
-                  span.inner-number 1
+                  span.inner-number(numberAdult) 0
                   span.inner-up +
               .inner-item
                 .inner-label Trẻ em
                 .inner-count
                   span.inner-down -
-                  span.inner-number 0
+                  span.inner-number(numberChildren) 0
                   span.inner-up +
               .inner-item
                 .inner-label Em bé
                 .inner-count
                   span.inner-down -
-                  span.inner-number 0
+                  span.inner-number(numberBaby) 0
                   span.inner-up +
           .inner-box.inner-calendar
             .inner-input-group
               img.inner-icon(src="/assets/images/icon-calendar.svg")
-              input.inner-input(type="date")
-          button.inner-button(type="submit")
+              input.inner-input(type="date" timeStart)
+          button.inner-button
             i.fa-solid.fa-magnifying-glass
             | Tìm Kiếm
   // End Section 1

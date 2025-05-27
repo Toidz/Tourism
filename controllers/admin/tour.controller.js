@@ -112,7 +112,12 @@ module.exports.createPost = async (req,res) =>{
         const position = await Tour.countDocuments({})
         req.body.position = position +1
     }
-    req.body.avatar =  req.file? req.file.path : " "
+    if(req.files && req.files.avatar) {
+        req.body.avatar = req.files.avatar[0].path;
+    } else {
+        delete req.body.avatar;
+    }
+
     req.body.priceAdult = req.body.priceAdult? parseInt(req.body.priceAdult): 0
     req.body.priceChildren = req.body.priceChildren? parseInt(req.body.priceChildren): 0
     req.body.priceBaby =  req.body.priceBaby? parseInt(req.body.priceBaby):0
@@ -123,6 +128,12 @@ module.exports.createPost = async (req,res) =>{
     req.body.stockChildren =  req.body.stockChildren? parseInt(req.body.stockChildren):0
     req.body.stockBaby =  req.body.stockBaby? parseInt(req.body.stockBaby):0
     req.body.locations = req.body.locations ? JSON.parse(req.body.locations):[]
+    if(req.files && req.files.images && req.files.images.length > 0) {
+        req.body.images = req.files.images.map(file => file.path);
+    } else {
+        delete req.body.images;
+    }
+
     req.body.departureDate = req.body.departureDate? new Date(req.body.departureDate):null
     req.body.createdBy = req.account.id
     req.body.updatedBy = req.account.id
@@ -204,12 +215,12 @@ module.exports.editPatch = async (req,res) =>{
             const totalCount= await Tour.countDocuments({})
             req.body.position = totalCount +1
         }
-        if(req.file){
-            req.body.avatar=req.file.path
+        if(req.files && req.files.avatar) {
+            req.body.avatar = req.files.avatar[0].path;
+        } else {
+            delete req.body.avatar;
         }
-        else{
-            delete req.body.avatar
-        }
+
         req.body.priceAdult = req.body.priceAdult? parseInt(req.body.priceAdult): 0
         req.body.priceChildren = req.body.priceChildren? parseInt(req.body.priceChildren): 0
         req.body.priceBaby =  req.body.priceBaby? parseInt(req.body.priceBaby):0
@@ -223,7 +234,12 @@ module.exports.editPatch = async (req,res) =>{
         req.body.departureDate = req.body.departureDate? new Date(req.body.departureDate):null
         req.body.updatedBy = req.account.id
         req.body.schedules =  req.body.schedules ? JSON.parse(req.body.schedules) : []
-        console.log(req.body)
+        if(req.files && req.files.images && req.files.images.length > 0) {
+            req.body.images = req.files.images.map(file => file.path);
+        } else {
+            delete req.body.images;
+        }
+
         await Tour.updateOne({
         _id:id,
         deleted:false

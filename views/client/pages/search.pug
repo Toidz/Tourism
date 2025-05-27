@@ -1,9 +1,6 @@
 extends ../layout/default.pug
 include ../mixins/product-item.pug
-include ../mixins/breadcrumb.pug
-block main 
-  +breadcrumb(bread,category)
-  // Section 9
+block main
   .section-9
     .container
       .inner-wrap
@@ -68,34 +65,16 @@ block main
           // End Box Filter
         .inner-right
           .inner-info
-            h2.inner-title #{bread.title}
-            .inner-desc
-              | !{bread.desc}
+            h2.inner-title Kết quả tìm kiếm
           .inner-info-2
-            .inner-sort
-              .inner-label Sắp xếp:
-              .inner-list
-                button
-                  | Giá tăng dần
-                  i.fa-solid.fa-square-caret-up
-                button
-                  | Giá giảm dần
-                  i.fa-solid.fa-square-caret-down
-                button.active
-                  | Khuyến Mại Hot
-                  i.fa-solid.fa-tag
-                button
-                  | Xem Nhiều
-                  i.fa-solid.fa-eye
             .inner-count-record
-              | Tất cả:
-              b  #{totalTour} Tour
+              h3 #{totalTour>0?"Có: "+ totalTour +" kết quả tìm kiếm": "Không tìm thấy tour thỏa mãn!"} 
             button.inner-filter-mobile
               span.inner-title Bộ Lọc
               i.fa-solid.fa-filter
           .inner-list-tour
             // Product Item
-            each item in tourList
+            each item in listTour
               +product-item(item)
             // End Product Item
           // Pagination
