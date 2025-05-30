@@ -66,28 +66,34 @@ module.exports.list = async (req,res) =>{
         const keywordRegex =  new RegExp(slug,"i")
         find.slug = keywordRegex 
     }
-    const limnit = 3
+
+    const totalCategory = await Category.countDocuments(find)
+    const limit = 3
+    const totalPage = Math.ceil(totalCategory/limit)
     let page =1
+
     if(req.query.page>0){
-        page = req.query.page
+        page = parseInt(req.query.page)
     }
-    const skip = (page -1)*limnit
-    const totalTour = await Category.countDocuments({
-        deleted:false
-    })
+    if(req.query.page>totalPage&&totalPage>0){
+        page = parseInt(totalPage)
+    }
+    const skip = (page - 1)*limit
+    console.log(page,limit)
+
     const pagination ={
-        totalPage:Math.ceil(totalTour/limnit),
-        totalTour:totalTour,
+        totalPage:totalPage,
+        totalCategory:totalCategory,
         skip:skip
     }
-    console.log(pagination)
+
     const categoryList = await Category
-    .find(find).
-    sort({
+    .find(find)
+    .sort({
         position:"desc"
-    }).
-    limit(limnit).
-    skip(skip)
+    })
+    .limit(limit)
+    .skip(skip)
 
 
     for (const item of categoryList) {
@@ -108,7 +114,9 @@ module.exports.list = async (req,res) =>{
     };
 
     const accountList = await AccountAdmin.find({
-    }).select("id fullName")
+        status:"active"
+    })
+
     res.render("admin/pages/category-list",{
         pageTitle:"Quản lý danh mục",
         categoryList: categoryList,

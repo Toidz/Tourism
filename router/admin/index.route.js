@@ -24,7 +24,7 @@ router.use("/order",authMidderWare.verifyToken,orderRouter);
 router.use("/profile",authMidderWare.verifyToken,profileRouter);
 router.use("/setting",authMidderWare.verifyToken,settingRouter);
 router.use("/tour",authMidderWare.verifyToken,tourRouter);
-router.use("/user",authMidderWare.verifyToken,userRouter);
+// router.use("/user",authMidderWare.verifyToken,userRouter);
 router.use("/upload",authMidderWare.verifyToken,uploadRouer);
 router.get("*",authMidderWare.verifyToken,errorController.error);
 

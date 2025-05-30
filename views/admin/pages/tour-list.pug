@@ -121,7 +121,7 @@ block main
 
     //- Section 7
     .section-7
-      span(class="inner-label") Hiển thị #{skip+1} - #{skip+tourList.length}  của #{totalTour}
+      span(class="inner-label" total=totalTour) Hiển thị #{skip+1} - #{skip+tourList.length}  của #{totalTour}
       select(class="inner-pagination" tour-page)
         - for(let i=1;i<=totalPage;i++)
           option(value=i) Trang #{i}

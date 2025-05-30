@@ -146,7 +146,7 @@ module.exports.accountAdminList = async (req,res) =>{
         const regex = new RegExp(slug,"i")
         find.slug = regex
     }
-    const totalAccount = await AccoutnAdmin.countDocuments({})
+    const totalAccount = await AccoutnAdmin.countDocuments(find)
     const limit =3
     let page =1
     if(req.query.page>0){

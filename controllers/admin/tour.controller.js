@@ -39,14 +39,16 @@ module.exports.list = async (req,res) =>{
         find.slug= regex
     }
     const limit =3
-    const totalTour = await Tour.countDocuments({
-        deleted:false
-    })
+    const totalTour = await Tour.countDocuments(find)
+    const totalPage = Math.ceil(totalTour/limit)
     let page =1
     if(req.query.page>0){
-        page = req.query.page
+        page = parseInt(req.query.page)
     }  
-    const totalPage = Math.ceil(totalTour/limit)
+    if(req.query.page>totalPage&&totalPage>0){
+        page = parseInt(totalPage)
+    } 
+
     const skip = limit*(page-1)
     const tourList = await Tour.find(find
     ).sort({
@@ -84,7 +86,6 @@ module.exports.list = async (req,res) =>{
         tourList:tourList,
         accountList:accountList,
         categoryList:categoryTree,
-        totalTour:totalTour,
         totalPage:totalPage,
         totalTour:totalTour,
         skip:skip

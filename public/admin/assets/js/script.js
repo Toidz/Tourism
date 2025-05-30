@@ -1,4 +1,3 @@
-
 // Menu Mobile
 const buttonMenuMobile = document.querySelector(".header .inner-button-menu");
 if(buttonMenuMobile) {
@@ -566,22 +565,62 @@ if(orderEditForm) {
     ])
     .onSuccess((event) => {
       const fullName = event.target.fullName.value;
+      const code = event.target.code.value
       const phone = event.target.phone.value;
       const note = event.target.note.value;
       const paymentMethod = event.target.paymentMethod.value;
       const paymentStatus = event.target.paymentStatus.value;
       const status = event.target.status.value;
 
-      console.log(fullName);
-      console.log(phone);
-      console.log(note);
-      console.log(paymentMethod);
-      console.log(paymentStatus);
-      console.log(status);
+      const dataFinal = {
+        fullName,
+        phone,
+        note,
+        method:paymentMethod,
+        payStatus:paymentStatus,
+        status
+      }
+      fetch(`/${pathAdmin}/order/edit/${code}`,{
+        method:"PATCH",
+        headers:{
+          "Content-type":"application/json"
+        },
+        body:JSON.stringify(dataFinal)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.code=="error"){
+          alert(data.message)
+        }
+        else{
+          window.location.reload()
+        }
+      })
     })
   ;
 }
 // End Order Edit Form
+
+//order-delete
+const  orderDelete = document.querySelector("[order-delete]")
+if(orderDelete){
+  orderDelete.addEventListener("click",()=>{
+    const apiDelete = orderDelete.getAttribute("order-delete")
+    fetch(apiDelete,{
+      method:"PATCH"
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      if(data.code=='error'){
+        alert(data.message)
+      }
+      else{
+        window.location.reload()
+      }
+    })
+  })
+}
+//End order-delete
 
 // Setting Website Info Form
 const settingWebsiteInfoForm = document.querySelector("#setting-website-info-form");
@@ -994,7 +1033,10 @@ if(innerPaginationAccount){
     window.location.href = url.href 
   })
   const currentPage = url.searchParams.get("page")
-  if(currentPage) innerPaginationAccount.value = currentPage
+  if(currentPage){
+    if(currentPage<0) innerPaginationAccount.value = 1
+    else innerPaginationAccount.value = currentPage
+  } 
 }
 //End pagination account
 
@@ -1037,7 +1079,7 @@ if(changeStatusAccount){
   }
 }
 //End change-status account
-//End----------Filter category
+//End----------Filter account
 
 // Setting Role Create Form
 const settingRoleCreateForm = document.querySelector("#setting-role-create-form");
@@ -1619,7 +1661,13 @@ if(innerPagination){
     window.location.href = url.href 
   })
   const currentPage = url.searchParams.get("page")
-  if(currentPage) innerPagination.value = currentPage
+  if(currentPage){
+    const total = document.querySelector("[total]")
+    const totalValue = total.getAttribute("total")
+    innerPagination.value = currentPage
+    if(totalValue<currentPage) innerPagination.value = totalValue
+    if(currentPage<0) innerPagination.value = 1
+  }
 }
 //End pagination
 
@@ -1819,7 +1867,15 @@ if(tourPage){
     window.location.href = url.href
   })
   const currentValue = url.searchParams.get("page")
-  if(currentValue) tourPage.value = currentValue
+  if(currentValue){
+    const total = document.querySelector("[total]")
+    const totalValue = total.getAttribute("total")
+    tourPage.value = currentValue
+    if(totalValue<currentValue) tourPage.value = totalValue
+
+    if(currentValue<0)  tourPage.value = 1
+  
+  }
 }
 //End pagination tour
 //End----------Filter tour
@@ -2110,3 +2166,137 @@ if(innerPaginationContact){
 //End pagination contact
 
 //End----------Filter contact
+
+
+
+//filter order
+
+//status
+const orderStatus = document.querySelector("[order-status]")
+if(orderStatus){
+  const url = new URL(window.location.href)
+  orderStatus.addEventListener("change",()=>{
+    if(orderStatus.value){
+      url.searchParams.set("status",orderStatus.value)
+    }
+    else{
+      url.searchParams.delete("status")
+    }
+    window.location.href = url.href
+  })
+  const current = url.searchParams.get("status")
+  if(current){
+    orderStatus.value= current
+  }
+}
+//end status
+
+//date
+const orderStartDate = document.querySelector("[order-startDate]")
+if(orderStartDate){
+  const url = new URL(window.location.href)
+  orderStartDate.addEventListener("change",()=>{
+    if(orderStartDate.value){
+      url.searchParams.set("startDate",orderStartDate.value)
+    }
+    else{
+      url.searchParams.delete("startDate")
+    }
+    window.location.href = url.href
+  })
+  const current = url.searchParams.get("startDate")
+  if(current){
+    orderStartDate.value= current
+  }
+}
+
+const orderEndDate = document.querySelector("[order-endDate]")
+if(orderEndDate){
+  const url = new URL(window.location.href)
+  orderEndDate.addEventListener("change",()=>{
+    if(orderEndDate.value){
+      url.searchParams.set("endDate",orderEndDate.value)
+    }
+    else{
+      url.searchParams.delete("endDate")
+    }
+    window.location.href = url.href
+  })
+  const current = url.searchParams.get("endDate")
+  if(current){
+    orderStartDate.value= current
+  }
+}
+//End date
+
+//method
+const orderMethod = document.querySelector("[order-method]")
+if(orderMethod){
+  const url = new URL(window.location.href)
+  orderMethod.addEventListener("change",()=>{
+    if(orderMethod.value){
+      url.searchParams.set("method",orderMethod.value)
+    }
+    else{
+      url.searchParams.delete("method")
+    }
+    window.location.href = url.href
+  })
+  const current = url.searchParams.get("method")
+  if(current){
+    orderMethod.value= current
+  }
+}
+//End method
+
+//status pay
+const orderStatusPay = document.querySelector("[order-statusPay]")
+if(orderStatusPay){
+  const url = new URL(window.location.href)
+  orderStatusPay.addEventListener("change",()=>{
+    if(orderStatusPay.value){
+      url.searchParams.set("statusPay",orderStatusPay.value)
+    }
+    else{
+      url.searchParams.delete("statusPay")
+    }
+    window.location.href = url.href
+  })
+  const current = url.searchParams.get("statusPay")
+  if(current){
+    orderStatusPay.value= current
+  }
+}
+//end status pay
+
+//delete filter
+const orderDeleteFilter = document.querySelector("[order-delete-filter]")
+if(orderDeleteFilter){
+  const url = new URL(window.location.href)
+  orderDeleteFilter.addEventListener("click",()=>{
+    url.search = ""
+    window.location.href = url.href
+  })
+}
+//End delete filter
+
+const orderSearch = document.querySelector("[order-search]")
+if(orderSearch){
+  const url = new URL(window.location.href)
+  orderSearch.addEventListener("keyup",(event)=>{
+    if(event.code=="Enter"){
+      if(orderSearch.value){
+        url.searchParams.set("keyword",orderSearch.value)
+      }
+      else{
+        url.searchParams.delete("keyword")
+      }
+      window.location.href = url.href
+    }
+  })
+  const current = url.searchParams.get("keyword")
+  if(current){
+    orderSearch.value= current
+  }
+}
+//End filter order
