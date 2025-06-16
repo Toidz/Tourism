@@ -66,23 +66,25 @@ module.exports.list = async (req,res)=>{
         const regex = new RegExp(req.query.keyword,"i")
         find.orderCode = regex
     }
+     const totalOrder = await Order.countDocuments(find)
     const limit = 4
-    const totalOrder = await Order.countDocuments(find)
     const totalPage= Math.ceil(totalOrder/limit)
     let page =1
     if(req.query.page>0){
-        page = req.query.page
+        page = parseInt(req.query.page)
     }
-    if(req.query.page>totalPage){
-        page = totalPage
+    if(req.query.page>totalPage&&totalPage>0){
+        page = parseInt(totalPage)
     }
     const skip = limit*(page-1)
+      console.log(page,limit)
     const pagination ={
         totalPage:totalPage,
         totalOrder:totalOrder,
         skip:skip
     }
-    const orderList = await Order.find(find)
+    const orderList = await Order
+    .find(find)
     .sort({
         createdAt:"desc"
     })

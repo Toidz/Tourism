@@ -68,10 +68,9 @@ module.exports.list = async (req,res) =>{
     }
 
     const totalCategory = await Category.countDocuments(find)
-    const limit = 3
+    const limit = 4
     const totalPage = Math.ceil(totalCategory/limit)
     let page =1
-
     if(req.query.page>0){
         page = parseInt(req.query.page)
     }

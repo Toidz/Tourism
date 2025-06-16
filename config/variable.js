@@ -5,10 +5,18 @@ module.exports.method =[
         lable:"Thanh toán tiền mặt",
         value:"money"
     },
+    // {
+    //     lable:"Ví momo",
+    //     value:"momo"
+    // },
     {
-        lable:"Ví momo",
-        value:"momo"
+        lable:"Zalopay",
+        value:"zalopay"
     },
+    // {
+    //     lable:"Vnpay",
+    //     value:"vnpay"
+    // },
     {
         lable:"Chuyển khoản ngân hàng",
         value:"bank"

@@ -392,7 +392,6 @@ if(orderForm) {
           method:method,
           cart:cart
         }
-        console.log(dataFinal)
         fetch(`/order/create`,{
           method:"POST",
           headers:{
@@ -407,10 +406,23 @@ if(orderForm) {
           }
           else{
             let cart = JSON.parse(localStorage.getItem("cart"))
-            const index = cart.findIndex(item => item.id == data.OrderId)
+            const index = cart.findIndex(item => item.id == data.orderId)
             cart.splice(index,1)
             localStorage.setItem("cart",JSON.stringify(cart))
-            window.location.href = `/order/success?orderId=${data.orderId}&phone=${phone}`
+            switch (method) {
+              case "money": case "bank":
+                window.location.href = `/order/success?orderId=${data.orderId}&phone=${phone}`
+                break;
+            
+              case "zalopay":
+                window.location.href = `/order/payment-zalopay?orderId=${data.orderId}`
+                break;
+
+              case "vnpay": 
+                window.location.href = `/order/payment-vnpay?orderId=${data.orderId}`
+                break;
+            }
+           
           }
         })
       }
